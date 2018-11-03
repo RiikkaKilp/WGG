@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public static bool canMove = true;
+    public static bool interacting = false;
     [SerializeField] float movementSpeed = 3f;
 
     void FixedUpdate()
@@ -12,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
         float inputH = Input.GetAxis("Horizontal");
         float inputV = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(inputH, inputV, 0).normalized;
+        Vector3 direction = new Vector3(inputH, inputV, 0);
 
-        if(canMove)
+        if(!interacting)
             transform.Translate(direction * movementSpeed * Time.deltaTime);
     }
 }
