@@ -6,8 +6,13 @@ using TMPro;
 public class Dialog : MonoBehaviour
 {
 
-    [SerializeField] TextMeshProUGUI textDisplay;
-    public string[] sentences;
+    [HideInInspector] public TextMeshProUGUI textDisplay;
+
+    public bool sentenceReady = false;
+    public List<string> sentences = new List<string>();
+
+    private float normalTypeSpeed;
+    public float skipTypeSpeed;
     public float typingSpeed;
     int index;
 
@@ -16,6 +21,7 @@ public class Dialog : MonoBehaviour
     void Start()
     {
         textDisplay.text = "";
+        normalTypeSpeed = typingSpeed;
     }
 
     public void StarType()
@@ -25,9 +31,18 @@ public class Dialog : MonoBehaviour
 
     private void Update()
     {
-        if(textDisplay.text == sentences[index])
+        if(PlayerMovement.interacting)
         {
-            continueButton.SetActive(true);
+            if(textDisplay.text == sentences[index])
+            {
+                sentenceReady = true;
+                continueButton.SetActive(true);
+            }
+            else
+            {
+                sentenceReady = false;
+                continueButton.SetActive(false);
+            }
         }
     }
 
@@ -42,7 +57,9 @@ public class Dialog : MonoBehaviour
 
     public void NextSentence()
     {
-        if(index < sentences.Length - 1)
+        typingSpeed = normalTypeSpeed;
+
+        if(index < sentences.Count - 1)
         {
             index++;
             textDisplay.text = "";
@@ -52,6 +69,8 @@ public class Dialog : MonoBehaviour
         {
             textDisplay.text = "";
             continueButton.SetActive(false);
+            PlayerMovement.interacting = false;
+            index = 0;
         }
     }
 }

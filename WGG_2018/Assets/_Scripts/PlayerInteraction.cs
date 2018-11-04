@@ -37,11 +37,20 @@ public class PlayerInteraction : MonoBehaviour
         {
             for (int i = 0; i < interactables.Count; i++)
             {
-                Debug.Log(interactables[i].name);
-                // give wanted sentences
-
-                dialog.sentences[0] = "kys idiot";
+                PlayerMovement.interacting = true;
+                dialog.sentences = interactables[i].GetComponent<Npc>().sentences;
                 dialog.StarType();
+            }
+        }
+        else if(Input.GetKeyDown(actionKey) && PlayerMovement.interacting)
+        {
+            if (!dialog.sentenceReady)
+            {
+                dialog.typingSpeed = dialog.skipTypeSpeed;
+            }
+            else
+            {
+                dialog.NextSentence();
             }
         }
     }
