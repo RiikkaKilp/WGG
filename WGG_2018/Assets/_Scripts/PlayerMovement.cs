@@ -22,48 +22,54 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        inputH = Input.GetAxisRaw("Horizontal");
-        inputV = Input.GetAxisRaw("Vertical");
-
-        if (canMoveDiagonally)
-        {
-            Vector3 direction = new Vector3(inputH, inputV, 0);
-
-            if (!interacting)
-            {
-                transform.Translate(direction * movementSpeed * Time.deltaTime);
-            }
-        }
-        else
-        {
-            if(inputH != 0 && !movingV)
-            {
-                movingH = true;
-
-                Vector3 direction = new Vector3(inputH, 0, 0);
-                transform.Translate(direction * movementSpeed * Time.deltaTime);
-            }
-            else
-            {
-                movingH = false;
-            }
-
-            if (inputV != 0 && !movingH)
-            {
-                movingV = true;
-
-                Vector3 direction = new Vector3(0, inputV, 0);
-                transform.Translate(direction * movementSpeed * Time.deltaTime);
-            }
-            else
-            {
-                movingV = false;
-            }
-        }
-
+        Movement();
         RotatePlayer();
         UpdateAnimations();
+    }
 
+    private void Movement()
+    {
+        if(!interacting)
+        {
+            inputH = Input.GetAxisRaw("Horizontal");
+            inputV = Input.GetAxisRaw("Vertical");
+
+            if (canMoveDiagonally)
+            {
+                Vector3 direction = new Vector3(inputH, inputV, 0);
+
+                if (!interacting)
+                {
+                    transform.Translate(direction * movementSpeed * Time.deltaTime);
+                }
+            }
+            else
+            {
+                if (inputH != 0 && !movingV)
+                {
+                    movingH = true;
+
+                    Vector3 direction = new Vector3(inputH, 0, 0);
+                    transform.Translate(direction * movementSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    movingH = false;
+                }
+
+                if (inputV != 0 && !movingH)
+                {
+                    movingV = true;
+
+                    Vector3 direction = new Vector3(0, inputV, 0);
+                    transform.Translate(direction * movementSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    movingV = false;
+                }
+            }
+        }
     }
 
     private void RotatePlayer()

@@ -5,19 +5,12 @@ using UnityEngine;
 public class PlayerInteraction : MonoBehaviour
 {
 
-    Dialog dialog;
-    [SerializeField] GameObject dialogManager;
     [SerializeField] List<GameObject> interactables = new List<GameObject>();
     [SerializeField] KeyCode actionKey;
-    
-    private void Start()
-    {
-        dialog = dialogManager.GetComponent<Dialog>();    
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!interactables.Contains(other.gameObject) && other.gameObject.tag != "Player")
+        if(other.gameObject.GetComponent<NPC>() != null && !interactables.Contains(other.gameObject))
         {
             interactables.Add(other.gameObject);
         }
@@ -38,20 +31,12 @@ public class PlayerInteraction : MonoBehaviour
             for (int i = 0; i < interactables.Count; i++)
             {
                 PlayerMovement.interacting = true;
-                dialog.sentences = interactables[i].GetComponent<Npc>().sentences;
-                dialog.StarType();
+                interactables[i].GetComponent<NPC>().TriggerConversation();
             }
         }
-        else if(Input.GetKeyDown(actionKey) && PlayerMovement.interacting)
+        if(Input.GetKeyDown(actionKey) && PlayerMovement.interacting && DialogManager.instance.sentenceReady)
         {
-            if (!dialog.sentenceReady)
-            {
-                dialog.typingSpeed = dialog.skipTypeSpeed;
-            }
-            else
-            {
-                dialog.NextSentence();
-            }
+            DialogManager.instance.NextSentence();
         }
     }
 
