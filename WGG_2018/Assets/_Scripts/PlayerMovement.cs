@@ -10,8 +10,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool canMoveDiagonally = false;
     [SerializeField] float movementSpeed = 3f;
 
-    float inputV, inputH;
-    bool movingV = false, movingH = false;
+    public float inputV { get; private set; }
+    public float inputH { get; private set; }
+    
+    public bool movingV = false, movingH = false;
 
     Animator anim;
 
@@ -69,6 +71,14 @@ public class PlayerMovement : MonoBehaviour
                     movingV = false;
                 }
             }
+        }
+        else
+        {
+            inputH = 0f;
+            inputV = 0f;
+
+            anim.SetFloat("Hor", 0);
+            anim.SetFloat("Ver", 0);
         }
     }
 
