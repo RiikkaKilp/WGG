@@ -22,54 +22,48 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement();
-        RotatePlayer();
-        UpdateAnimations();
-    }
+        inputH = Input.GetAxisRaw("Horizontal");
+        inputV = Input.GetAxisRaw("Vertical");
 
-    private void Movement()
-    {
-        if(!interacting)
+        if (canMoveDiagonally)
         {
-            inputH = Input.GetAxisRaw("Horizontal");
-            inputV = Input.GetAxisRaw("Vertical");
+            Vector3 direction = new Vector3(inputH, inputV, 0);
 
-            if (canMoveDiagonally)
+            if (!interacting)
             {
-                Vector3 direction = new Vector3(inputH, inputV, 0);
+                transform.Translate(direction * movementSpeed * Time.deltaTime);
+            }
+        }
+        else
+        {
+            if(inputH != 0 && !movingV)
+            {
+                movingH = true;
 
-                if (!interacting)
-                {
-                    transform.Translate(direction * movementSpeed * Time.deltaTime);
-                }
+                Vector3 direction = new Vector3(inputH, 0, 0);
+                transform.Translate(direction * movementSpeed * Time.deltaTime);
             }
             else
             {
-                if (inputH != 0 && !movingV)
-                {
-                    movingH = true;
+                movingH = false;
+            }
 
-                    Vector3 direction = new Vector3(inputH, 0, 0);
-                    transform.Translate(direction * movementSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    movingH = false;
-                }
+            if (inputV != 0 && !movingH)
+            {
+                movingV = true;
 
-                if (inputV != 0 && !movingH)
-                {
-                    movingV = true;
-
-                    Vector3 direction = new Vector3(0, inputV, 0);
-                    transform.Translate(direction * movementSpeed * Time.deltaTime);
-                }
-                else
-                {
-                    movingV = false;
-                }
+                Vector3 direction = new Vector3(0, inputV, 0);
+                transform.Translate(direction * movementSpeed * Time.deltaTime);
+            }
+            else
+            {
+                movingV = false;
             }
         }
+
+        RotatePlayer();
+        UpdateAnimations();
+
     }
 
     private void RotatePlayer()
